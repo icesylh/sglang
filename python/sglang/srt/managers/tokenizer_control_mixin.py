@@ -124,13 +124,7 @@ _COMMUNICATOR_SPECS = [
 
 
 def _merge_lora_update_results(results: List[LoRAUpdateOutput]) -> LoRAUpdateOutput:
-    """Merge the per-rank replies of a LoRA load/unload fan-out into one result.
-
-    The operation succeeded only if every rank succeeded. Reporting a partial
-    failure as success would let the tokenizer-side LoRA registry drift from
-    the ranks that failed, so failures win: their deduplicated error messages
-    are joined, and loaded_adapters reflects the first failed rank.
-    """
+    """Merge per-rank LoRA update replies into one result; any failure fails the op."""
     failed = [r for r in results if not r.success]
     if not failed:
         return results[0]
