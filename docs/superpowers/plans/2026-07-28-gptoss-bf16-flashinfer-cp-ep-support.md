@@ -93,6 +93,7 @@ PY
   Use the pristine main checkout or a clean worktree at `fc8b328f...`, install it, and launch with the exact topology:
 
   ```bash
+  SGLANG_ALLOW_OVERWRITE_LONGER_CONTEXT_LEN=1 \
   SGLANG_TORCH_PROFILER_DIR=/scratch/gptoss_bf16_cp4_ep4_opt_20260728/support \
   CUDA_VISIBLE_DEVICES=0,1,2,3 \
   python3 -m sglang.launch_server \
@@ -662,6 +663,7 @@ def _supports_flashinfer_a2a_parallelism(self) -> bool:
     set -eu
     cd /sgl-workspace/sglang
     task_root=/scratch/gptoss_bf16_cp4_ep4_opt_20260728/support
+    SGLANG_ALLOW_OVERWRITE_LONGER_CONTEXT_LEN=1 \
     SGLANG_TORCH_PROFILER_DIR="$task_root" \
     CUDA_VISIBLE_DEVICES=0,1,2,3 \
     nohup python3 -m sglang.launch_server \

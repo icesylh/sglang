@@ -18,7 +18,8 @@
 - Acceptance metric is the median across runs of each run’s `mean_ttft_ms`. CP must be strictly lower than TP for both concurrency values. TPOT is reported but is not a pass/fail gate.
 - Require CP to win at least three of five same-pair comparisons at each concurrency.
 - Use the same model, TRT-LLM MHA backend, context length, capture buckets, random seeds, scheduler limits, and MoE runner for both modes. The TP mode removes only CP/EP/A2A flags.
-- Apply these identical resolved-memory/scheduler flags to every matched CP/TP profile and benchmark: `--kv-cache-dtype bf16 --page-size 1 --max-running-requests 4 --mem-fraction-static 0.85`. Record the resolved server values and reject a pair if they differ.
+- Apply these identical resolved-memory/scheduler flags to every matched CP/TP profile and benchmark: `--kv-cache-dtype bf16 --page-size 64 --max-running-requests 4 --mem-fraction-static 0.85`. TRT-LLM MHA supports page sizes 16, 32, or 64 and main resolves this model to 64; record the resolved server values and reject a pair if they differ.
+- Set `SGLANG_ALLOW_OVERWRITE_LONGER_CONTEXT_LEN=1` for every 139264- or 270336-context server launch so the fixed 128K and 256K workloads reach the intended backend rather than failing model-config validation.
 - Preserve every server command, commit SHA, environment value, raw JSONL file, and server log.
 - Apply `add-jit-kernel` for any new lightweight CUDA kernel.
 - Use `superpowers:systematic-debugging` for crashes, hangs, wrong outputs, or regressions.
@@ -198,6 +199,7 @@ python3 benchmark/gpt_oss/compare_bf16_cp_ep_results.py \
   Common settings:
 
   ```text
+  SGLANG_ALLOW_OVERWRITE_LONGER_CONTEXT_LEN=1
   --context-length 139264
   --chunked-prefill-size 131072
   --max-prefill-tokens 131072
@@ -577,6 +579,7 @@ def zigzag_shard_rows(
   Use:
 
   ```text
+  SGLANG_ALLOW_OVERWRITE_LONGER_CONTEXT_LEN=1
   --model-path /scratch/models/gpt-oss-120b-bf16
   --attention-backend trtllm_mha
   --moe-runner-backend flashinfer_trtllm_routed
@@ -685,6 +688,7 @@ def zigzag_shard_rows(
   Common:
 
   ```text
+  SGLANG_ALLOW_OVERWRITE_LONGER_CONTEXT_LEN=1
   --context-length 270336
   --chunked-prefill-size 262144
   --max-prefill-tokens 262144

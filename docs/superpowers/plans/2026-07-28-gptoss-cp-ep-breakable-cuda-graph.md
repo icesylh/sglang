@@ -573,6 +573,7 @@ def _validate_cp_flashinfer_dispatch_capacity(
   Use:
 
   ```text
+  SGLANG_ALLOW_OVERWRITE_LONGER_CONTEXT_LEN=1
   SGLANG_FLASHINFER_NUM_MAX_DISPATCH_TOKENS_PER_RANK=65536
   --context-length 139264
   --chunked-prefill-size 131072

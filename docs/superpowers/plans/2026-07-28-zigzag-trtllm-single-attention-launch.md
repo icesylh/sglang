@@ -456,6 +456,7 @@ def _get_zigzag_layer_page_table(
   Use:
 
   ```text
+  SGLANG_ALLOW_OVERWRITE_LONGER_CONTEXT_LEN=1
   SGLANG_FLASHINFER_NUM_MAX_DISPATCH_TOKENS_PER_RANK=65536
   --tp 4 --ep 4
   --enable-prefill-cp --attn-cp-size 4 --cp-strategy zigzag
